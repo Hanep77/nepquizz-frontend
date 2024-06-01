@@ -1,10 +1,14 @@
 import { Outlet } from "react-router-dom"
+import Navbar from "../components/Navbar"
 
 const AuthenticatedLayout = () => {
     return (
-        <main className="max-w-screen-md mx-5 md:mx-auto">
-            <Outlet />
-        </main>
+        <>
+            <Navbar />
+            <main className="max-w-screen-md mx-5 md:mx-auto mt-20">
+                <Outlet />
+            </main>
+        </>
     )
 }
 

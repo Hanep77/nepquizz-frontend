@@ -62,7 +62,7 @@ const Home = () => {
             <div className="grid sm:grid-cols-2 gap-2">
                 {data.map(quizz => (
                     <div key={quizz.id} className="bg-slate-700 p-4 rounded flex flex-col justify-between" >
-                        <div>
+                        <div className="mb-3">
                             <div className="flex justify-between text-sm">
                                 <p className="text-blue-400">{quizz.category}</p>
                                 <p className={`${quizz.difficulity == 'easy' && 'text-green-500'} ${quizz.difficulity == 'medium' && 'text-yellow-500'} ${quizz.difficulity == 'hard' && 'text-red-500'}`}>{quizz.difficulity}</p>
