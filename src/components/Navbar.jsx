@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaUser, FaUserCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
     const [user, setUser] = useState(false)
@@ -11,12 +12,14 @@ export default function Navbar() {
                 <div className="relative">
                     <button className="text-2xl" onClick={() => setUser(!user)}><FaUserCircle /></button>
                     <div className={`${!user && "hidden"} absolute w-40 md:w-52 bg-slate-700 right-0 p-4 rounded border border-slate-500`}>
-                        <div className="flex flex-col items-center gap-1">
-                            <div className="text-2xl"><FaUserCircle /></div>
-                            <h3 className="text-center text-lg font-semibold">Yudis Sutisna</h3>
-                            <button className="w-full text-sm py-1 bg-slate-500 hover:bg-slate-600 rounded">View Profile</button>
-                            <button className="w-full text-sm py-1 bg-red-500 hover:bg-red-600 active:bg-red-700 rounded">Logout</button>
+                        <div className="flex items-center gap-2 mb-3">
+                            <Link to="/" className="text-4xl cursor-pointer"><FaUserCircle /></Link>
+                            <div>
+                                <Link to="/" className="text-center text-lg font-semibold">Yudis Sutisna</Link>
+                                <p className="text-sm">0 points</p>
+                            </div>
                         </div>
+                        <button className="w-full text-sm py-1 bg-red-500 hover:bg-red-600 active:bg-red-700 rounded">Logout</button>
                     </div>
                 </div>
             </nav>
