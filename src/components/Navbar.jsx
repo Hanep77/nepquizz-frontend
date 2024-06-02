@@ -11,7 +11,7 @@ export default function Navbar() {
                 <h2 className="text-xl font-semibold">NepQuizz</h2>
                 <div className="relative">
                     <button className="text-2xl" onClick={() => setUser(!user)}><FaUserCircle /></button>
-                    <div className={`${!user && "hidden"} absolute w-40 md:w-52 bg-slate-700 right-0 p-4 rounded border border-slate-500`}>
+                    <div className={`${!user && "hidden"} absolute w-52 bg-slate-700 right-0 p-4 rounded border border-slate-500`}>
                         <div className="flex items-center gap-2 mb-3">
                             <Link to="/" className="text-4xl cursor-pointer"><FaUserCircle /></Link>
                             <div>
