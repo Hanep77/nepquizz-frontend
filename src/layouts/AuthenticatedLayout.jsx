@@ -9,7 +9,7 @@ const AuthenticatedLayout = () => {
 
     useEffect(() => {
         axiosClient.get('/me').then(response => setCurrentUser(response.data))
-    })
+    }, [])
 
     if (!userToken) {
         return <Navigate to="/login" />
