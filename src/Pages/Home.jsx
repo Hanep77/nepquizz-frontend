@@ -60,8 +60,8 @@ const Home = () => {
                 <SortBy title={difficulities.title} list={difficulities.list} />
             </div>
             <div className="grid sm:grid-cols-2 gap-2">
-                {data.map(quizz => (
-                    <QuizzCard quizz={quizz} />
+                {data.map(quiz => (
+                    <QuizzCard quiz={quiz} />
                 ))}
             </div>
         </div >
