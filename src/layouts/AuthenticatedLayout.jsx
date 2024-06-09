@@ -18,7 +18,7 @@ const AuthenticatedLayout = () => {
     return (
         <>
             <Navbar />
-            <main className="max-w-screen-md mx-5 md:mx-auto mt-20">
+            <main className="max-w-screen-md mx-5 md:mx-auto mt-20 mb-5">
                 <Outlet />
             </main>
         </>

@@ -1,6 +1,9 @@
-import { Link } from "react-router-dom"
+import { useState } from "react"
 
-export default function Detail() {
+export default function Quiz() {
+    const [answeredQuestion, setAnsweredQuestion] = useState([])
+    const [correctness, setCorrectness] = useState([])
+
     const data = {
         id: 1,
         title: "javascript quizz for beginner",
@@ -14,6 +17,7 @@ export default function Detail() {
         },
         questions: [
             {
+                id: 1,
                 question: "what is the output of this program",
                 answers: [
                     {
@@ -35,6 +39,7 @@ export default function Detail() {
                 ]
             },
             {
+                id: 2,
                 question: "what is the output of this program",
                 answers: [
                     {
@@ -56,6 +61,7 @@ export default function Detail() {
                 ]
             },
             {
+                id: 3,
                 question: "what is the output of this program",
                 answers: [
                     {
@@ -79,20 +85,44 @@ export default function Detail() {
         ]
     }
 
+    const handleAnswer = (question_id, is_correct) => {
+        setAnsweredQuestion([...answeredQuestion, question_id])
+        setCorrectness([...correctness, { question_id, is_correct }])
+    }
+
+    const isAlreadyAnswered = (question_id) => {
+        if (answeredQuestion.length < 1) {
+            return false
+        }
+
+        let result = false
+        result = answeredQuestion.find(answered => answered == question_id)
+
+        return result
+    }
+
+    const isCorrect = (question_id) => {
+        const question = correctness.find(q => q.question_id == question_id)
+        return question.is_correct
+    }
+
     return (
-        <div className="bg-slate-700 p-4 rounded">
-            <h2 className="text-xl md:text-2xl font-semibold mb-3">{data.title}</h2>
-            <div className="mb-3 text-slate-300 font-light">
-                <p>difficulity : <span className={`${data.difficulity == 'easy' && 'text-green-500'} ${data.difficulity == 'medium' && 'text-yellow-500'} ${data.difficulity == 'hard' && 'text-red-500'} font-medium`}>{data.difficulity}</span></p>
-                <p>category : <span className="text-blue-400 font-medium">{data.category}</span></p>
-                <p>author : <Link to={'/users/' + data.author.id} className="text-slate-200 font-medium">{data.author.name}</Link></p>
-                <p>number of questions : <span className="text-slate-200 font-medium">{data.questions.length}</span></p>
-            </div>
-            <p className="mb-3 text-slate-300 font-light">{data.description}</p>
-            <div className="flex justify-end gap-2 text-white">
-                <Link to={'/quiz/' + data.id} className="bg-green-600 hover:bg-green-500 w-24 py-1 rounded text-center">start quiz</Link>
-                <button className="bg-slate-600 hover:bg-slate-500 w-16 py-1 rounded">share</button>
-            </div>
+        <div>
+            {
+                data.questions.map(question => (
+                    <div key={question.id}
+                        className={`mb-3 ${!isAlreadyAnswered(question.id) ? "bg-slate-700" : isCorrect(question.id) ? "bg-green-700 bg-opacity-30" : "bg-red-700 bg-opacity-30"} p-4 rounded`}>
+                        <h3 className="mb-3 text-lg font-medium">{question.question}</h3>
+                        <div className="grid grid-cols-2 gap-2">
+                            {question.answers.map(answer => (
+                                <button key={answer.answer} type="button"
+                                    onClick={() => handleAnswer(question.id, answer.is_correct_answer)}
+                                    className="backdrop-brightness-125 hover:backdrop-brightness-150 py-2 px-4 rounded">{answer.answer}</button>
+                            ))}
+                        </div>
+                    </div>
+                ))
+            }
         </div>
     )
 }

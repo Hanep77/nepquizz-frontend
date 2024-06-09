@@ -5,6 +5,8 @@ import GuestLayout from "./layouts/GuestLayout";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import Detail from "./Pages/Detail";
+import Quiz from "./Pages/Quiz";
+import CreateQuiz from "./Pages/CreateQuiz";
 
 const router = createBrowserRouter([
     {
@@ -18,6 +20,14 @@ const router = createBrowserRouter([
             {
                 path: '/quiz/detail/:id',
                 element: <Detail />
+            },
+            {
+                path: '/quiz/create',
+                element: <CreateQuiz />
+            },
+            {
+                path: '/quiz/:id',
+                element: <Quiz />
             }
         ]
     },

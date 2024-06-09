@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import QuizzCard from "../components/QuizzCard"
 import Search from "../components/Search"
 import SortBy from "../components/SortBy"
@@ -58,6 +59,9 @@ const Home = () => {
             <div className="mb-3 sm:mb-5 flex gap-2">
                 <SortBy title={categories.title} list={categories.list} />
                 <SortBy title={difficulities.title} list={difficulities.list} />
+            </div>
+            <div className="mb-3 sm:mb-5">
+                <Link to={'/quiz/create'} className="bg-green-600 hover:bg-green-500 p-2 rounded">Create New Quiz</Link>
             </div>
             <div className="grid sm:grid-cols-2 gap-2">
                 {data.map(quiz => (
