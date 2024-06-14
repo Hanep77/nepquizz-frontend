@@ -2,73 +2,36 @@ import { Link } from "react-router-dom"
 import QuizzCard from "../components/QuizzCard"
 import Search from "../components/Search"
 import SortBy from "../components/SortBy"
+import { useEffect, useState } from "react"
+import axiosClient from "../axios"
 
 const Home = () => {
-    const data = [
-        {
-            id: 1,
-            title: "javascript quizz for beginner",
-            description: "you can test your javascript knowledge by attempting to this quizz",
-            category: "programming",
-            difficulity: "easy",
-            author: {
-                id: 1,
-                name: "steve",
-                email: "steve@gmail.com"
-            }
-        },
-        {
-            id: 2,
-            title: "guess the player",
-            description: "test your football knowledge",
-            category: "sport",
-            difficulity: "medium",
-            author: {
-                id: 1,
-                name: "steve",
-                email: "steve@gmail.com"
-            }
-        },
-        {
-            id: 3,
-            title: "this math quizz make you sick",
-            description: "you can test your math knowledge by attempting to this quizz",
-            category: "math",
-            difficulity: "hard",
-            author: {
-                id: 1,
-                name: "steve",
-                email: "steve@gmail.com"
-            }
-        }
-    ]
+    const [quizzes, setQuizzes] = useState([])
+    const [categories, setCategories] = useState([])
+    const [difficulities, setDifficulities] = useState([])
 
-    const categories = {
-        title: "Categories",
-        list: ["Programming", "Math", "Sport"]
-    }
-
-    const difficulities = {
-        title: "Difficulity",
-        list: ["Easy", "Medium", "Hard"]
-    }
+    useEffect(() => {
+        axiosClient.get('/quizzes').then(response => setQuizzes(response.data))
+        axiosClient.get('/categories').then(response => setCategories(response.data))
+        axiosClient.get('/difficulities').then(response => setDifficulities(response.data))
+    }, [])
 
     return (
         <div>
             <Search />
             <div className="mb-3 sm:mb-5 flex gap-2">
-                <SortBy title={categories.title} list={categories.list} />
-                <SortBy title={difficulities.title} list={difficulities.list} />
+                <SortBy title={"Categories"} name="category_id" list={categories} />
+                <SortBy title={"Difficulities"} name="difficulity_id" list={difficulities} />
             </div>
             <div className="mb-3 sm:mb-5">
                 <Link to={'/quiz/create'} className="bg-green-600 hover:bg-green-500 p-2 rounded">Create New Quiz</Link>
             </div>
             <div className="grid sm:grid-cols-2 gap-2">
-                {data.map(quiz => (
-                    <QuizzCard quiz={quiz} />
+                {quizzes.map(quiz => (
+                    <QuizzCard key={quiz.id} quiz={quiz} />
                 ))}
             </div>
-        </div >
+        </div>
     )
 }
 
