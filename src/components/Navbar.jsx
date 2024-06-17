@@ -14,7 +14,7 @@ export default function Navbar() {
     }
 
     return (
-        <header className="fixed bg-slate-700 top-0 left-0 right-0">
+        <header className="fixed bg-slate-700 top-0 left-0 right-0 z-50">
             <nav className="h-16 flex justify-between items-center px-5 md:px-0 max-w-screen-md m-auto">
                 <h2 className="text-xl font-semibold">NepQuizz</h2>
                 <div className="relative">
