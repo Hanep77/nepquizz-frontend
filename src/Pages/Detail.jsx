@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import axiosClient from "../axios"
 
 export default function Detail() {
     const [data, setData] = useState({})
     const { pathname } = useLocation()
     const quiz_id = pathname.split('/')[3]
+    const navigate = useNavigate()
 
-    useEffect(() => {
+    useEffect((e) => {
         axiosClient.get('/quizzes/' + quiz_id).then(response => {
             setData(response.data)
-            console.log(response.data)
-        })
+        }).catch(error => error.response.status === 404 && navigate('/'))
     }, [])
 
     return (
