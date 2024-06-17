@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import QuizzCard from "../components/QuizzCard"
 import Search from "../components/Search"
 import SortBy from "../components/SortBy"
@@ -9,9 +9,10 @@ const Home = () => {
     const [quizzes, setQuizzes] = useState([])
     const [categories, setCategories] = useState([])
     const [difficulities, setDifficulities] = useState([])
+    const { search } = useLocation()
 
     useEffect(() => {
-        axiosClient.get('/quizzes').then(response => setQuizzes(response.data))
+        axiosClient.get('/quizzes' + search).then(response => setQuizzes(response.data))
         axiosClient.get('/categories').then(response => setCategories(response.data))
         axiosClient.get('/difficulities').then(response => setDifficulities(response.data))
     }, [])
@@ -21,8 +22,8 @@ const Home = () => {
             <Search />
             <form action="">
                 <div className="mb-3 sm:mb-5 flex gap-2">
-                    <SortBy title={"Categories"} name="categories" list={categories} />
-                    <SortBy title={"Difficulities"} name="difficulities" list={difficulities} />
+                    <SortBy title={"Categories"} name="category" list={categories} />
+                    <SortBy title={"Difficulities"} name="difficulity" list={difficulities} />
                 </div>
             </form>
             <div className="mb-3 sm:mb-5">
