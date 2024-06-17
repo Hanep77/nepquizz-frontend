@@ -19,10 +19,12 @@ const Home = () => {
     return (
         <div>
             <Search />
-            <div className="mb-3 sm:mb-5 flex gap-2">
-                <SortBy title={"Categories"} name="category_id" list={categories} />
-                <SortBy title={"Difficulities"} name="difficulity_id" list={difficulities} />
-            </div>
+            <form action="">
+                <div className="mb-3 sm:mb-5 flex gap-2">
+                    <SortBy title={"Categories"} name="categories" list={categories} />
+                    <SortBy title={"Difficulities"} name="difficulities" list={difficulities} />
+                </div>
+            </form>
             <div className="mb-3 sm:mb-5">
                 <Link to={'/quiz/create'} className="bg-green-600 hover:bg-green-500 p-2 rounded">Create New Quiz</Link>
             </div>
