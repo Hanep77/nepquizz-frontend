@@ -7,6 +7,7 @@ import Register from "./Pages/Register";
 import Detail from "./Pages/Detail";
 import Quiz from "./Pages/Quiz";
 import CreateQuiz from "./Pages/CreateQuiz";
+import CompleteQuiz from "./Pages/CompleteQuiz";
 
 const router = createBrowserRouter([
     {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
             {
                 path: '/quiz/create',
                 element: <CreateQuiz />
+            },
+            {
+                path: '/quiz/complete/:id',
+                element: <CompleteQuiz />
             },
             {
                 path: '/quiz/:id',

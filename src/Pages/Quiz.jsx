@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axiosClient from "../axios"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 export default function Quiz() {
     const [answeredQuestion, setAnsweredQuestion] = useState([])
@@ -8,10 +8,12 @@ export default function Quiz() {
     const { pathname } = useLocation()
     const gameSessionId = pathname.split('/')[2]
     const [error, setError] = useState(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         axiosClient.get('/get-game/' + gameSessionId).then(response => {
-            setData(response.data)
+            response.data.finished_at && navigate('/quiz/complete/' + gameSessionId)
+            setData(response.data.quiz)
         }).catch(error => {
             console.log(error.response)
             setError({
@@ -34,6 +36,17 @@ export default function Quiz() {
             });
     }
 
+    const handleFinishQuiz = () => {
+        const isComplete = confirm("are you sure?")
+        if (!isComplete) {
+            return
+        }
+
+        axiosClient.post('/end-game', { game_session_id: gameSessionId }).then(response => {
+            navigate('/quiz/complete/' + response.data.id)
+        })
+    }
+
     return (
         <div>
             {data?.questions?.map(question => (
@@ -50,12 +63,18 @@ export default function Quiz() {
                     </div>
                 </div>
             ))}
+            {!error && (
+                <div className="text-center bg-slate-700 p-4 rounded">
+                    <p className="mb-3">Click the button below if you have completed the quiz</p>
+                    <button onClick={handleFinishQuiz} className="h-8 px-2 bg-green-600 hover:bg-green-500 active:bg-green-400 rounded">Done</button>
+                </div>
+            )}
             {error && <ErrorMessage statusCode={error.statusCode} message={error.message} />}
         </div>
     )
 }
 
-function AnswerButton({ content, onClickAnswer, isSelected }) {
+export function AnswerButton({ content, onClickAnswer, isSelected }) {
     return (
         <button type="button" onClick={onClickAnswer}
             className={`backdrop-brightness-125 ${isSelected && "bg-slate-400"} hover:backdrop-brightness-150 py-2 px-4 rounded`}>

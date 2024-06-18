@@ -36,6 +36,8 @@ export default function Detail() {
             </div>
             <p className="mb-3 text-slate-300 font-light">{data.description}</p>
             <div className="flex justify-end gap-2 text-white">
+
+                {/* Make the text and link on the buttons dynamic (start quiz, continue, and view stats) */}
                 <button onClick={() => handleStartGame(data.id)} className="bg-green-600 hover:bg-green-500 w-24 py-1 rounded text-center">start quiz</button>
                 <button className="bg-slate-600 hover:bg-slate-500 w-16 py-1 rounded">share</button>
             </div>
