@@ -48,7 +48,6 @@ export default function Quiz() {
 }
 
 function AnswerButton({ content, onClickAnswer, isSelected }) {
-    console.log(isSelected)
     return (
         <button type="button" onClick={onClickAnswer}
             className={`backdrop-brightness-125 ${isSelected && "bg-slate-400"} hover:backdrop-brightness-150 py-2 px-4 rounded`}>
