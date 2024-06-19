@@ -15,7 +15,6 @@ export default function Quiz() {
             response.data.finished_at && navigate('/')
             setData(response.data.quiz)
         }).catch(error => {
-            console.log(error.response)
             setError({
                 statusCode: error.response.status,
                 message: error.response.data.message
@@ -53,14 +52,7 @@ export default function Quiz() {
                 <div key={question.id}
                     className={`mb-3 bg-slate-700 p-4 rounded`}>
                     <h3 className="mb-3 text-lg font-medium">{question.content}</h3>
-                    <div className="grid grid-cols-2 gap-2">
-                        {question?.answers?.map(answer => (
-                            <AnswerButton key={answer.id}
-                                content={answer.content}
-                                onClickAnswer={() => handleAnswer(answer.id)}
-                                isSelected={answeredQuestion.some(ans => ans.answer_id == answer.id)} />
-                        ))}
-                    </div>
+                    <Answers question={question} onClickAnswer={handleAnswer} answeredQuestion={answeredQuestion} />
                 </div>
             ))}
             {!error && (
@@ -74,12 +66,16 @@ export default function Quiz() {
     )
 }
 
-export function AnswerButton({ content, onClickAnswer, isSelected }) {
+export function Answers({ question, onClickAnswer, answeredQuestion }) {
     return (
-        <button type="button" onClick={onClickAnswer}
-            className={`backdrop-brightness-125 ${isSelected && "bg-slate-400"} hover:backdrop-brightness-150 py-2 px-4 rounded`}>
-            {content}
-        </button>
+        <div className="grid grid-cols-2 gap-2">
+            {question?.answers?.map(answer => (
+                <button key={answer.id} type="button" onClick={() => onClickAnswer(answer.id)}
+                    className={`backdrop-brightness-125 ${answeredQuestion.some(ans => ans.answer_id == answer.id) && "bg-slate-400"} hover:backdrop-brightness-150 py-2 px-4 rounded`}>
+                    {answer.content}
+                </button>
+            ))}
+        </div>
     )
 }
 
@@ -88,7 +84,7 @@ function ErrorMessage({ statusCode, message }) {
         <div className="text-center mt-32">
             <p>{message}</p>
             <h2 className="text-3xl font-medium mb-5">{statusCode}</h2>
-            <Link to={'/'} className="p-2 bg-green-600 hover:bg-green-500 active:bg-green-400 rounded">back to home page</Link>
+            <Link to='/' className="p-2 bg-green-600 hover:bg-green-500 active:bg-green-400 rounded">back to home page</Link>
         </div>
     )
 }

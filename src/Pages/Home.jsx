@@ -20,15 +20,12 @@ const Home = () => {
     return (
         <div>
             <Search />
-            <form action="">
+            <form>
                 <div className="mb-3 sm:mb-5 flex gap-2">
                     <SortBy title={"Categories"} name="category" list={categories} />
                     <SortBy title={"Difficulities"} name="difficulity" list={difficulities} />
                 </div>
             </form>
-            <div className="mb-3 sm:mb-5">
-                <Link to={'/quiz/create'} className="bg-green-600 hover:bg-green-500 p-2 rounded">Create New Quiz</Link>
-            </div>
             <div className="grid sm:grid-cols-2 gap-2">
                 {quizzes.map(quiz => (
                     <QuizzCard key={quiz.id} quiz={quiz} />

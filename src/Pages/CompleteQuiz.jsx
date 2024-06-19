@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import axiosClient from "../axios"
 import { StateContext } from "../context/ContextProvider"
+import { QuizInformation } from "./Detail"
 
 export default function CompleteQuiz() {
     const [data, setData] = useState({})
@@ -26,10 +27,7 @@ export default function CompleteQuiz() {
             <div className="bg-slate-700 p-4 rounded mb-3">
                 <h2 className="text-xl md:text-2xl font-semibold mb-3">{data?.quiz?.title}</h2>
                 <div className="mb-3 text-slate-300 font-light">
-                    <p>difficulity : <span className={`${data?.quiz?.difficulity?.slug == 'easy' && 'text-green-500'} ${data?.quiz?.difficulity?.slug == 'medium' && 'text-yellow-500'} ${data?.quiz?.difficulity?.slug == 'hard' && 'text-red-500'} font-medium`}>{data?.quiz?.difficulity?.title}</span></p>
-                    <p>category : <span className="text-blue-400 font-medium">{data?.quiz?.category?.title}</span></p>
-                    <p>author : <Link to={'/users/' + data?.quiz?.author?.id} className="text-slate-200 font-medium">{data?.quiz?.author?.name}</Link></p>
-                    <p>number of questions : <span className="text-slate-200 font-medium">{data?.quiz?.questions?.length}</span></p>
+                    <QuizInformation data={data?.quiz} />
                     <p>correct answers : <span className="text-green-500 font-medium">{correctAnswer?.length}</span></p>
                 </div>
                 <p className="mb-3 text-slate-300 font-light">{data?.quiz?.description}</p>
