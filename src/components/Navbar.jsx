@@ -1,16 +1,17 @@
 import { useContext, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosClient from "../axios";
 import { StateContext } from "../context/ContextProvider";
 
 export default function Navbar() {
     const { currentUser } = useContext(StateContext)
     const [user, setUser] = useState(false)
+    const navigate = useNavigate()
 
     const handleLogout = (e) => {
         e.preventDefault()
-        axiosClient.post('/logout')
+        axiosClient.post('/logout').then(() => navigate("/login"))
     }
 
     return (
