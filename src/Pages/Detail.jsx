@@ -16,13 +16,17 @@ export default function Detail() {
         }).catch(error => error.response.status === 404 && navigate('/'))
     }, [])
 
-    const handleStartGame = (quiz_id) => {
-        axiosClient.post('/start-game', {
-            user_id: currentUser.id,
-            quiz_id
-        }).then(response => {
-            navigate('/quiz/' + response.data.id)
-        })
+    const handleStartGame = (quiz_id, game_session) => {
+        if (game_session?.finished_at) {
+            navigate('/quiz/complete/' + game_session.id)
+        } else {
+            axiosClient.post('/start-game', {
+                user_id: currentUser.id,
+                quiz_id
+            }).then(response => {
+                navigate('/quiz/' + response.data.id)
+            })
+        }
     }
 
     return (
@@ -38,7 +42,9 @@ export default function Detail() {
             <div className="flex justify-end gap-2 text-white">
 
                 {/* Make the text and link on the buttons dynamic (start quiz, continue, and view stats) */}
-                <button onClick={() => handleStartGame(data.id)} className="bg-green-600 hover:bg-green-500 w-24 py-1 rounded text-center">start quiz</button>
+                <button onClick={() => handleStartGame(data.id, data.game_session)} className="bg-green-600 hover:bg-green-500 w-24 py-1 rounded text-center">
+                    {!data.game_session ? "start game" : data.game_session.finished_at ? "view stats" : "continue"}
+                </button>
                 <button className="bg-slate-600 hover:bg-slate-500 w-16 py-1 rounded">share</button>
             </div>
         </div>

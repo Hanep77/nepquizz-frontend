@@ -12,7 +12,7 @@ export default function Quiz() {
 
     useEffect(() => {
         axiosClient.get('/get-game/' + gameSessionId).then(response => {
-            response.data.finished_at && navigate('/quiz/complete/' + gameSessionId)
+            response.data.finished_at && navigate('/')
             setData(response.data.quiz)
         }).catch(error => {
             console.log(error.response)
