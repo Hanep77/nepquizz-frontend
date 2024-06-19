@@ -14,6 +14,7 @@ export default function Quiz() {
         axiosClient.get('/get-game/' + gameSessionId).then(response => {
             response.data.finished_at && navigate('/')
             setData(response.data.quiz)
+            setAnsweredQuestion(response.data.user_answers)
         }).catch(error => {
             setError({
                 statusCode: error.response.status,
@@ -28,10 +29,13 @@ export default function Quiz() {
 
     const handleAnswer = (answer_id) => {
         axiosClient.post('/user-answer', { answer_id, game_session_id: gameSessionId })
-            .then(() => {
-                axiosClient.get('/get-user-answers/' + gameSessionId).then(response => {
-                    setAnsweredQuestion(response.data)
-                })
+            .then((response) => {
+                if (answeredQuestion.some(ans => ans.question_id == response.data.question_id)) {
+                    return setAnsweredQuestion(answeredQuestion.map(ans => {
+                        return ans.question_id == response.data.question_id ? response.data : ans
+                    }))
+                }
+                setAnsweredQuestion([...answeredQuestion, response.data])
             });
     }
 
@@ -71,7 +75,7 @@ export function Answers({ question, onClickAnswer, answeredQuestion }) {
         <div className="grid grid-cols-2 gap-2">
             {question?.answers?.map(answer => (
                 <button key={answer.id} type="button" onClick={() => onClickAnswer(answer.id)}
-                    className={`backdrop-brightness-125 ${answeredQuestion.some(ans => ans.answer_id == answer.id) && "bg-slate-400"} hover:backdrop-brightness-150 py-2 px-4 rounded`}>
+                    className={`backdrop-brightness-125 ${answeredQuestion.some(ans => ans.answer.id == answer.id) && "bg-slate-400"} hover:backdrop-brightness-150 py-2 px-4 rounded`}>
                     {answer.content}
                 </button>
             ))}
