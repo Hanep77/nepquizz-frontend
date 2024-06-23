@@ -24,15 +24,45 @@ export default function CreateQuiz() {
         e.preventDefault()
         if (!confirm("are you sure?")) return
 
+        // const sanitizeQuestion = questions.map(question => {
+        //     return {
+        //         content: question.content,
+        //         answers: question.answers.map(answer => {
+        //             return {
+        //                 content: answer.content,
+        //                 is_correct: answer.is_correct
+        //             }
+        //         })
+        //     }
+        // })
+
         const data = {
             title: e.target.title.value,
             description: e.target.description.value,
             category_id: e.target.category_id.value,
-            difficulity_id: e.target.difficulity_id.value,
-            questions: questions
+            difficulity_id: e.target.difficulity_id.value
         }
 
-        console.log(data)
+        axiosClient.post('/quizzes', data).then(response => {
+            const quiz_id = response.data.id
+
+            questions.map(question => {
+                axiosClient.post('/questions', { quiz_id, content: question.content }).then(response => {
+                    const question_id = response.data.id
+                    const answers = question.answers.map(answer => {
+                        return {
+                            question_id,
+                            content: answer.content,
+                            is_correct: answer.is_correct
+                        }
+                    })
+
+                    answers.map(answer => {
+                        axiosClient.post('/answers', answer).then(response => response.data)
+                    })
+                })
+            })
+        })
     }
 
     return (
@@ -57,13 +87,13 @@ export default function CreateQuiz() {
                 <div className="flex sm:flex-col gap-2 sm:gap-1 items-center sm:items-start">
                     <label htmlFor="category">Category</label>
                     <select name={"category_id"} id={"category_id"} className="bg-slate-700 px-2 border-none h-8 outline-none rounded border border-slate-500">
-                        {categories?.map(value => <option key={value.slug} value={value.slug}>{value.title}</option>)}
+                        {categories?.map(value => <option key={value.slug} value={value.id}>{value.title}</option>)}
                     </select>
                 </div>
                 <div className="flex sm:flex-col gap-2 sm:gap-1 items-center sm:items-start">
                     <label htmlFor="difficulity">Difficulity</label>
                     <select name={"difficulity_id"} id={"difficulity_id"} className="bg-slate-700 px-2 border-none h-8 outline-none rounded border border-slate-500">
-                        {difficulities?.map(value => <option key={value.slug} value={value.slug}>{value.title}</option>)}
+                        {difficulities?.map(value => <option key={value.slug} value={value.id}>{value.title}</option>)}
                     </select>
                 </div>
             </div>
