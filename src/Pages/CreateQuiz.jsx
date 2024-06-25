@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import axiosClient from "../axios"
+import { useNavigate } from "react-router-dom"
 
 export default function CreateQuiz() {
     const [questions, setQuestions] = useState([{ index: 1, content: "", answers: [] }])
     const [categories, setCategories] = useState([])
     const [difficulities, setDifficulities] = useState([])
+    const navigate = useNavigate()
 
     const handleAddQuestionNumber = () => {
         setQuestions([...questions, { index: questions.length + 1, content: "", answers: [] }])
@@ -24,45 +26,16 @@ export default function CreateQuiz() {
         e.preventDefault()
         if (!confirm("are you sure?")) return
 
-        // const sanitizeQuestion = questions.map(question => {
-        //     return {
-        //         content: question.content,
-        //         answers: question.answers.map(answer => {
-        //             return {
-        //                 content: answer.content,
-        //                 is_correct: answer.is_correct
-        //             }
-        //         })
-        //     }
-        // })
-
         const data = {
             title: e.target.title.value,
             description: e.target.description.value,
             category_id: e.target.category_id.value,
-            difficulity_id: e.target.difficulity_id.value
+            difficulity_id: e.target.difficulity_id.value,
+            questions: questions
         }
 
-        axiosClient.post('/quizzes', data).then(response => {
-            const quiz_id = response.data.id
-
-            questions.map(question => {
-                axiosClient.post('/questions', { quiz_id, content: question.content }).then(response => {
-                    const question_id = response.data.id
-                    const answers = question.answers.map(answer => {
-                        return {
-                            question_id,
-                            content: answer.content,
-                            is_correct: answer.is_correct
-                        }
-                    })
-
-                    answers.map(answer => {
-                        axiosClient.post('/answers', answer).then(response => response.data)
-                    })
-                })
-            })
-        })
+        axiosClient.post('/quizzes', data)
+            .then(response => response.status === 201 && navigate('/'))
     }
 
     return (
