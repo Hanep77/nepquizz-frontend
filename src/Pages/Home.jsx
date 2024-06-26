@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import QuizzCard from "../components/QuizzCard"
 import Search from "../components/Search"
 import SortBy from "../components/SortBy"

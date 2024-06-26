@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import axiosClient from "../axios"
-import { StateContext } from "../context/ContextProvider"
 import { QuizInformation } from "./Detail"
 
 export default function CompleteQuiz() {

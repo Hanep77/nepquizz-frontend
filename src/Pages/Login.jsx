@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Input from "../components/Input";
 import PasswordInput from "../components/PasswordInput";
 import axiosClient from "../axios";
-import { useState, useContext, useEffect } from "react"
+import { useState, useContext } from "react"
 import { StateContext } from "../context/ContextProvider"
 
 export default function Login() {
