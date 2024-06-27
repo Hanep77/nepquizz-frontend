@@ -1,9 +1,16 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { StateContext } from "../context/ContextProvider";
 
 export default function QuizzCard({ quiz, onDeleteQuiz }) {
     const { currentUser } = useContext(StateContext)
+    const [description, setDescription] = useState(null)
+
+    useEffect(() => {
+        setDescription(quiz.description.length > 70 ? quiz.description.substring(0, 70) + '...' : quiz.description)
+    })
+
+    if (!quiz) return
 
     return (
         <div key={quiz.id} className="bg-slate-700 p-4 rounded flex flex-col justify-between" >
@@ -13,7 +20,7 @@ export default function QuizzCard({ quiz, onDeleteQuiz }) {
                     <p className={`${quiz.difficulity.slug == 'easy' && 'text-green-500'} ${quiz.difficulity.slug == 'medium' && 'text-yellow-500'} ${quiz.difficulity.slug == 'hard' && 'text-red-500'}`}>{quiz.difficulity.title}</p>
                 </div>
                 <h2 className="text-lg font-semibold">{quiz.title}</h2>
-                <p className="text-slate-400 font-light">{quiz.description}</p>
+                <p className="text-slate-400 font-light">{description}</p>
             </div>
             <div className="flex justify-end gap-2 text-white">
                 {currentUser.id == quiz.author.id &&

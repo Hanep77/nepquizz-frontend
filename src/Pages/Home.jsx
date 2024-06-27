@@ -15,14 +15,14 @@ const Home = () => {
         axiosClient.get('/quizzes' + search).then(response => setQuizzes(response.data))
         axiosClient.get('/categories').then(response => setCategories(response.data))
         axiosClient.get('/difficulities').then(response => setDifficulities(response.data))
-    }, [quizzes])
+    }, [])
 
     const handleDeleteQuiz = (quiz_id) => {
         if (!confirm('are you sure?')) return
         axiosClient.delete(`/quizzes/${quiz_id}`)
             .then(response => {
                 if (response.status == 200) {
-                    quizzes.map(quiz => quiz.id !== quiz_id && quiz)
+                    setQuizzes(quizzes.filter(quiz => quiz.id !== quiz_id && quiz))
                     alert(response.data.message)
                 }
             })
