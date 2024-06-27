@@ -36,6 +36,7 @@ export default function CreateQuiz() {
 
         axiosClient.post('/quizzes', data)
             .then(response => response.status === 201 && navigate('/'))
+            .catch(error => error.response.status == 422 && alert("failed to create quiz. make sure each column is filled in"))
     }
 
     return (
