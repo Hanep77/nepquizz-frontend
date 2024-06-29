@@ -6,13 +6,14 @@ export default function CreateQuiz() {
     const [questions, setQuestions] = useState([{ index: 1, content: "", answers: [{ index: 1, content: "", is_correct: true }, { index: 2, content: "", is_correct: false }, { index: 3, content: "", is_correct: false }, { index: 4, content: "", is_correct: false }] }])
     const [categories, setCategories] = useState([])
     const [difficulities, setDifficulities] = useState([])
+    const [savedQuizData, setSavedQuizData] = useState(JSON.parse(localStorage.getItem('quiz')))
     const navigate = useNavigate()
 
-    const handleAddQuestionNumber = (e) => {
+    const handleAddQuestionNumber = () => {
         setQuestions([...questions, { index: questions.length + 1, content: "", answers: [{ index: 1, content: "", is_correct: true }, { index: 2, content: "", is_correct: false }, { index: 3, content: "", is_correct: false }, { index: 4, content: "", is_correct: false }] }])
     }
 
-    const handleReduceQuestionNumber = (e) => {
+    const handleReduceQuestionNumber = () => {
         if (questions.length <= 1) return
         const newQuestions = questions.slice(0, questions.length - 1)
         setQuestions(newQuestions)
@@ -23,7 +24,6 @@ export default function CreateQuiz() {
         if (localStorage.getItem('questions')) {
             setQuestions(JSON.parse(localStorage.getItem("questions")))
         }
-
         axiosClient.get('/categories').then(response => setCategories(response.data))
         axiosClient.get('/difficulities').then(response => setDifficulities(response.data))
     }, [])
@@ -44,34 +44,35 @@ export default function CreateQuiz() {
             .then(response => {
                 response.status === 201 && navigate('/')
                 localStorage.removeItem("questions")
+                localStorage.removeItem("quiz")
             })
             .catch(error => error.response.status == 422 && alert("failed to create quiz. make sure each column is filled in"))
     }
 
     function handleSaveData(e) {
-        // TODO: save title, description, category and difficulitys to localStorage
-
-        // const data = {
-        //     title: e.target.title.value,
-        //     description: e.target.description.value,
-        //     category_id: e.target.category_id.value,
-        //     difficulity_id: e.target.difficulity_id.value,
-        //     questions: questions
-        // }
-
-        localStorage.setItem("questions", JSON.stringify(questions))
-        console.log(JSON.parse(localStorage.getItem("questions")))
+        const name = e.target.name
+        if (name == 'title' || name == 'description' || name == 'category_id' || name == 'difficulity_id') {
+            const value = {}
+            value[name] = e.target.value
+            const insertedValue = { ...savedQuizData, ...value }
+            setSavedQuizData(insertedValue)
+            localStorage.setItem("quiz", JSON.stringify(insertedValue))
+        } else {
+            localStorage.setItem("questions", JSON.stringify(questions))
+        }
     }
 
     return (
         <form onSubmit={handleSubmit} onKeyUp={handleSaveData}>
             <div className="mb-3 flex flex-col gap-1">
                 <label htmlFor="title">Quiz Title</label>
-                <input type="text" id="title" className="bg-slate-700 h-8 px-2 rounded w-full outline-none" name="title" placeholder="title" />
+                <input type="text" id="title" defaultValue={savedQuizData?.title}
+                    className="bg-slate-700 h-8 px-2 rounded w-full outline-none" name="title" placeholder="title" />
             </div>
             <div className="mb-3 flex flex-col gap-1">
                 <label htmlFor="description">Description</label>
-                <textarea id="description" className="bg-slate-700 px-2 py-1 rounded w-full outline-none" name="description" placeholder="description" />
+                <textarea id="description" defaultValue={savedQuizData?.description}
+                    className="bg-slate-700 px-2 py-1 rounded w-full outline-none" name="description" placeholder="description" />
             </div>
             <div className="mb-3 flex flex-col sm:flex-row gap-3">
                 <div className="flex sm:flex-col gap-2 sm:gap-1 items-center sm:items-start">
@@ -89,13 +90,14 @@ export default function CreateQuiz() {
                 </div>
                 <div className="flex sm:flex-col gap-2 sm:gap-1 items-center sm:items-start">
                     <label htmlFor="category">Category</label>
-                    <select name={"category_id"} id={"category_id"} className="bg-slate-700 px-2 border-none h-8 outline-none rounded border border-slate-500">
+                    <select name={"category_id"} id={"category_id"} value={savedQuizData?.category_id} onChange={handleSaveData}
+                        className="bg-slate-700 px-2 border-none h-8 outline-none rounded border border-slate-500">
                         {categories?.map(value => <option key={value.slug} value={value.id}>{value.title}</option>)}
                     </select>
                 </div>
                 <div className="flex sm:flex-col gap-2 sm:gap-1 items-center sm:items-start">
                     <label htmlFor="difficulity">Difficulity</label>
-                    <select name={"difficulity_id"} id={"difficulity_id"}
+                    <select name={"difficulity_id"} id={"difficulity_id"} value={savedQuizData?.difficulity_id} onChange={handleSaveData}
                         className="bg-slate-700 px-2 border-none h-8 outline-none rounded border border-slate-500">
                         {difficulities?.map(value => <option key={value.slug} value={value.id}>{value.title}</option>)}
                     </select>
